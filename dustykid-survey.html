@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dustykid Survey 塵話過問卷</title>
+<!-- Google Fonts (progressive enhancement — falls back to system fonts if blocked) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f3ee;
+  --bg2: #eee9e0;
+  --card: #ffffff;
+  --border: #e0dbd2;
+  --text: #3a3633;
+  --text2: #7a756d;
+  --accent: #6b8f71;
+  --accent2: #8fb396;
+  --dusty-dark: #5c5856;
+  --dusty-body: #6b6866;
+  --warm: #c9956b;
+  --coral: #d4836d;
+  --blue: #7cafc4;
+  --pink: #c98da7;
+  --green: #8fb89a;
+  --yellow: #e2c55a;
+  --shadow: 0 2px 16px rgba(90,80,70,0.07);
+  --shadow2: 0 4px 24px rgba(90,80,70,0.1);
+  --radius: 16px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Quicksand', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== DUST PARTICLES ===== */
+.particles {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  pointer-events: none; z-index:0; overflow:hidden;
+}
+.particle {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: rgba(107,143,113,0.15);
+  border-radius: 50%;
+  animation: floatP linear infinite;
+}
+@keyframes floatP {
+  0% { transform: translateY(110vh) scale(0); opacity:0; }
+  10% { opacity:1; transform: translateY(90vh) scale(1); }
+  90% { opacity:0.4; }
+  100% { transform: translateY(-10vh) scale(0.2); opacity:0; }
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  position: relative; z-index:1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+/* ===== HEADER ===== */
+.survey-header {
+  text-align: center;
+  padding: 40px 0 32px;
+}
+
+.dust-logo {
+  width: 80px; height: 72px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+.dust-logo .body {
+  width: 68px; height: 60px;
+  background: var(--dusty-body);
+  border-radius: 50% 50% 44% 44%;
+  position: absolute; bottom:0; left:6px;
+  animation: bob 3s ease-in-out infinite;
+}
+.dust-logo .eye {
+  width: 12px; height: 15px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 18px;
+}
+.dust-logo .eye.l { left:16px; }
+.dust-logo .eye.r { right:16px; }
+.dust-logo .pupil {
+  width: 6px; height: 7px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px; left:50%; transform:translateX(-50%);
+}
+.dust-logo .mouth {
+  width: 16px; height: 8px;
+  border-bottom: 2.5px solid #fff;
+  border-radius: 0 0 50% 50%;
+  position: absolute;
+  bottom: 14px; left:50%; transform:translateX(-50%);
+}
+@keyframes bob {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.survey-header h1 {
+  font-family: 'Caveat', 'Segoe Script', 'Comic Sans MS', cursive;
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.survey-header .subtitle {
+  font-size: 0.95rem;
+  color: var(--text2);
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ===== PROGRESS ===== */
+.progress-wrap {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg);
+  padding: 12px 0 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.progress-info {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.8rem; color: var(--text2);
+  font-weight: 600;
+}
+.progress-track {
+  width: 100%; height: 5px;
+  background: var(--bg2);
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  display: none;
+  animation: fadeIn 0.45s ease;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(107,143,113,0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.section-desc {
+  font-size: 0.85rem;
+  color: var(--text2);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+/* ===== QUESTION CARD ===== */
+.q-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.q-card:hover { box-shadow: var(--shadow2); }
+
+.q-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.q-text {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.q-text-en {
+  font-size: 0.88rem;
+  color: var(--text2);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.q-hint {
+  font-size: 0.78rem;
+  color: var(--text2);
+  font-style: italic;
+  margin-bottom: 14px;
+}
+
+/* ===== RADIO / CHECKBOX OPTIONS ===== */
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+
+.opt-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg);
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.opt-item:hover { background: rgba(107,143,113,0.06); border-color: var(--accent2); }
+.opt-item.selected { background: rgba(107,143,113,0.1); border-color: var(--accent); }
+
+.opt-item input[type="radio"],
+.opt-item input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px; min-width: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  margin-top: 2px;
+  transition: all 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+.opt-item input[type="checkbox"] { border-radius: 5px; }
+
+.opt-item input:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.opt-item input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 8px; height: 8px;
+  background: #fff;
+  border-radius: 50%;
+}
+.opt-item input[type="checkbox"]:checked::after {
+  width: 10px; height: 6px;
+  background: none;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  border-radius: 0;
+  transform: translate(-50%,-60%) rotate(-45deg);
+}
+
+.opt-label span.zh { display: block; font-weight: 500; }
+.opt-label span.en { display: block; font-size: 0.82rem; color: var(--text2); }
+
+/* ===== LIKERT SCALE ===== */
+.likert-wrap { padding: 8px 0; }
+.likert-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--text2);
+  margin-bottom: 10px;
+}
+.likert-row {
+  display: flex; justify-content: center; gap: 12px;
+}
+.likert-btn {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.likert-btn:hover { border-color: var(--accent); color: var(--accent); }
+.likert-btn.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* ===== RANKING (drag) ===== */
+.rank-list { display: flex; flex-direction: column; gap: 8px; }
+.rank-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.25s;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  user-select: none;
+}
+.rank-item .rank-num {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.rank-item .rank-text { flex: 1; }
+.rank-arrows {
+  display: flex; flex-direction: column; gap: 2px;
+  flex-shrink: 0; margin-left: auto;
+}
+.rank-arrows button {
+  width: 30px; height: 24px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+.rank-arrows button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.rank-arrows button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.rank-arrows button:disabled:hover {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text2);
+}
+.rank-item.moving-up {
+  animation: slideUp 0.25s ease;
+}
+.rank-item.moving-down {
+  animation: slideDown 0.25s ease;
+}
+@keyframes slideUp {
+  0% { transform: translateY(10px); opacity: 0.6; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideDown {
+  0% { transform: translateY(-10px); opacity: 0.6; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== NAV BUTTONS ===== */
+.nav-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; gap: 12px;
+}
+
+.btn {
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+}
+.btn-next {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(107,143,113,0.3);
+}
+.btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107,143,113,0.4); }
+.btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-back {
+  background: transparent;
+  color: var(--text2);
+  border: 1.5px solid var(--border);
+}
+.btn-back:hover { border-color: var(--text2); }
+
+/* ===== VALIDATION MSG ===== */
+.validation-msg {
+  font-size: 0.82rem;
+  color: var(--coral);
+  margin-top: 8px;
+  display: none;
+}
+.validation-msg.show { display: block; }
+
+/* ===== RESULT SCREEN ===== */
+.result-screen { display: none; text-align: center; }
+.result-screen.active { display: block; animation: fadeIn 0.6s ease; }
+
+.result-card {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 48px 32px 40px;
+  box-shadow: var(--shadow2);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.result-dust {
+  width: 140px; height: 130px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+.result-dust .body {
+  width: 120px; height: 108px;
+  border-radius: 50% 50% 44% 44%;
+  position: absolute; bottom:0; left:10px;
+  animation: bob 3s ease-in-out infinite;
+}
+.result-dust .eye {
+  width: 16px; height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 30px;
+}
+.result-dust .eye.l { left:26px; }
+.result-dust .eye.r { right:26px; }
+.result-dust .pupil {
+  width: 8px; height: 9px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 3px; left:50%; transform:translateX(-50%);
+}
+.result-dust .mouth-smile {
+  width: 22px; height: 11px;
+  border-bottom: 3px solid #fff;
+  border-radius: 0 0 50% 50%;
+  position: absolute;
+  bottom: 22px; left:50%; transform:translateX(-50%);
+}
+.result-dust .feature { position: absolute; }
+
+.result-tag {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.result-name {
+  font-family: 'Caveat', 'Segoe Script', 'Comic Sans MS', cursive;
+  font-size: 2.8rem;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.result-chinese-name {
+  font-size: 1.1rem;
+  color: var(--text2);
+  margin-bottom: 20px;
+}
+
+.result-desc {
+  font-size: 0.95rem;
+  color: var(--text2);
+  line-height: 1.8;
+  max-width: 480px;
+  margin: 0 auto 24px;
+}
+
+.result-quote {
+  font-family: 'Caveat', 'Segoe Script', 'Comic Sans MS', cursive;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  max-width: 400px;
+  margin: 0 auto 28px;
+  position: relative;
+  padding: 0 24px;
+}
+
+.trait-pills {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  margin-bottom: 28px;
+}
+.trait-pill {
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1.5px solid;
+}
+
+.score-breakdown { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+.score-breakdown h3 {
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.sb-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.sb-label { width: 80px; text-align: right; font-size: 0.82rem; color: var(--text2); }
+.sb-track { flex:1; height:7px; background: var(--bg2); border-radius:4px; overflow:hidden; }
+.sb-fill { height:100%; border-radius:4px; transition: width 1s ease; width:0%; }
+.sb-pct { width:36px; font-size:0.78rem; color:var(--text2); }
+
+.btn-restart {
+  padding: 14px 40px;
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 50px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-top: 16px;
+}
+.btn-restart:hover { background: var(--accent); color:#fff; }
+
+/* ===== THANK YOU NOTE ===== */
+.thank-you-note {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text2);
+  margin-top: 20px;
+  line-height: 1.7;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 520px) {
+  .container { padding: 20px 14px 60px; }
+  .q-card { padding: 20px 18px 18px; }
+  .survey-header h1 { font-size: 1.8rem; }
+  .likert-btn { width: 44px; height: 44px; font-size: 1rem; }
+  .result-name { font-size: 2.2rem; }
+  .result-card { padding: 36px 20px 32px; }
+}
+
+/* multi-select hint */
+.multi-hint {
+  font-size: 0.78rem;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <!-- HEADER -->
+  <div class="survey-header">
+    <div class="dust-logo">
+      <div class="body">
+        <div class="eye l"><div class="pupil"></div></div>
+        <div class="eye r"><div class="pupil"></div></div>
+        <div class="mouth"></div>
+      </div>
+    </div>
+    <h1>Dustykid Survey 塵話過問卷</h1>
+    <p class="subtitle">
+      這項匿名調查旨在了解香港中學生的心理健康需求及對 AI 情緒支持工具的看法。完成約需 5-10 分鐘。<br>
+      <span style="color:var(--text2);font-size:0.88rem;">This anonymous survey explores mental health needs of HK secondary students and attitudes toward AI emotional support tools. Takes approx. 5-10 mins.</span>
+    </p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-info">
+      <span id="progressLabel">開始 / Start</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- ALL SECTIONS RENDERED BY JS -->
+  <div id="surveyBody"></div>
+
+  <!-- RESULT -->
+  <div class="result-screen" id="resultScreen">
+    <div class="result-card">
+      <div class="result-dust" id="resultDust">
+        <div class="body" id="rBody">
+          <div class="eye l"><div class="pupil"></div></div>
+          <div class="eye r"><div class="pupil"></div></div>
+          <div class="mouth-smile" id="rMouth"></div>
+        </div>
+      </div>
+      <div class="result-tag">你是… / You are…</div>
+      <div class="result-name" id="rName"></div>
+      <div class="result-chinese-name" id="rCnName"></div>
+      <div class="result-desc" id="rDesc"></div>
+      <div class="result-quote" id="rQuote"></div>
+      <div class="trait-pills" id="rPills"></div>
+      <div class="score-breakdown">
+        <h3>你的塵 DNA / Your Dust DNA</h3>
+        <div id="rBars"></div>
+      </div>
+    </div>
+    <div class="thank-you-note">
+      感謝您完成問卷！您的回應將幫助我們改善服務。<br>
+      Thank you for completing the survey! Your responses will help us improve our services.
+    </div>
+    <button class="btn-restart" onclick="location.reload()">再試一次 / Try Again</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CHARACTER DEFINITIONS
+// ============================================================
+const characters = {
+  dustykid: {
+    name: "Dustykid", cn: "塵", color: "#6b6866",
+    desc: "你是安靜的思考者，在最微小的事物中找到意義。你的沉穩智慧和安慰他人的能力，使人們不知不覺地被你吸引。\nYou're the quiet thinker who finds meaning in the smallest things. People are drawn to your calm wisdom and your ability to comfort without saying much.",
+    quote: "即使最微小的塵，內心也承載著一個宇宙。\nEven the smallest dust carries the weight of a universe inside.",
+    traits: ["Reflective 深思", "Gentle 溫柔", "Philosophical 哲學", "Observant 敏銳", "Comforting 安慰"]
+  },
+  teary: {
+    name: "Teary", cn: "淚塵", color: "#7cafc4",
+    desc: "你感受一切都很深刻，這就是你的超能力。你的敏感讓你能在最真誠的層面上與他人連結。你的淚水不是軟弱，而是你用整顆心體驗生命的證明。\nYou feel everything deeply, and that's your superpower. Your sensitivity lets you connect with others on the most genuine level. Your tears aren't weakness — they're proof you experience life with your whole heart.",
+    quote: "哭泣沒關係。每滴淚都在滋潤你內心某些美好的東西。\nIt's okay to cry. Every tear waters something beautiful inside you.",
+    traits: ["Empathetic 共情", "Sensitive 敏感", "Compassionate 慈悲", "Authentic 真誠", "Caring 關懷"]
+  },
+  hearty: {
+    name: "Hearty", cn: "心塵", color: "#d4836d",
+    desc: "愛是你的語言，溫暖從你做的每件事中散發出來。你總是第一個伸出援手的人，你的心很大——有時太慷慨了——但你不會有其他選擇。\nLove is your language, and warmth radiates from everything you do. You're always the first to offer a hug or a listening ear. Your heart is enormous — sometimes too generous — but you wouldn't have it any other way.",
+    quote: "一顆溫暖的心可以照亮房間裡最黑暗的角落。\nA warm heart can light up even the darkest corners of a room.",
+    traits: ["Loving 愛心", "Generous 慷慨", "Warm 溫暖", "Nurturing 呵護", "Devoted 忠誠"]
+  },
+  minidust: {
+    name: "Mini Dust", cn: "小塵", color: "#8fb89a",
+    desc: "好奇、睜大雙眼、對世界永不厭倦——那就是你！你的赤子之心啟發他人放慢腳步，注意藏在眼前的魔法。\nCurious, wide-eyed, and endlessly fascinated by the world — that's you! Your childlike wonder inspires others to slow down and notice the magic hiding in plain sight.",
+    quote: "世界充滿了等待小眼睛去發現的小奇蹟。\nThe world is full of tiny wonders waiting for tiny eyes to discover them.",
+    traits: ["Curious 好奇", "Playful 愛玩", "Innocent 純真", "Adventurous 冒險", "Joyful 快樂"]
+  },
+  dustmay: {
+    name: "Dust May", cn: "塵妹", color: "#c98da7",
+    desc: "甜美但堅強，柔軟但堅定——你擁有讓人意想不到的安靜韌性。你深深關心公平，不怕為重要的事站出來，同時保持你溫柔的優雅。\nSweet but strong, soft but determined — you carry a quiet resilience that catches people off guard. You care deeply about fairness and aren't afraid to stand up for what matters, all while keeping your gentle grace.",
+    quote: "柔軟不是脆弱。最溫柔的雨能塑造一座山。\nSoftness is not fragility. The gentlest rain can shape a mountain.",
+    traits: ["Resilient 堅韌", "Graceful 優雅", "Determined 堅定", "Kind 善良", "Balanced 平衡"]
+  },
+  sunny: {
+    name: "Sunny", cn: "陽塵", color: "#e2c55a",
+    desc: "你是每個人一天中的亮點！你的樂觀具有感染力，你的能量提升了每個你進入的房間。即使生活遭遇風暴，你也有不可思議的能力找到希望。\nYou are the bright spot in everyone's day! Your optimism is infectious and your energy lifts every room you enter. Even when life gets stormy, you have this incredible ability to find the silver lining and share it with others.",
+    quote: "即使在陰天，太陽仍在那裡——就像你的微笑。\nEven on cloudy days, the sun is still there — just like your smile.",
+    traits: ["Optimistic 樂觀", "Energetic 活力", "Cheerful 開朗", "Encouraging 鼓舞", "Radiant 閃耀"]
+  }
+};
+
+// ============================================================
+// SURVEY QUESTIONS DATA
+// ============================================================
+const sections = [
+  // --- SECTION 0: Demographics ---
+  {
+    id: "demo",
+    label: "基本資料 / Demographics",
+    title: "",
+    desc: "",
+    questions: [
+      {
+        id: "grade", type: "radio",
+        zh: "您目前就讀哪個年級？", en: "What is your current form level?",
+        options: [
+          { zh: "中五", en: "F.5", val: "f5" },
+          { zh: "中六", en: "F.6", val: "f6" }
+        ]
+      },
+      {
+        id: "gender", type: "radio",
+        zh: "您的性別是？", en: "What is your gender?",
+        options: [
+          { zh: "男", en: "Male", val: "male" },
+          { zh: "女", en: "Female", val: "female" },
+          { zh: "非二元/其他", en: "Non-binary/Other", val: "nb" },
+          { zh: "不願透露", en: "Prefer not to say", val: "pns" }
+        ]
+      },
+      {
+        id: "school", type: "radio",
+        zh: "您就讀哪種類型的中學？", en: "What type of secondary school do you attend?",
+        options: [
+          { zh: "官立", en: "Government", val: "gov" },
+          { zh: "資助", en: "Aided", val: "aided" },
+          { zh: "直接資助計劃 (DSS)", en: "Direct Subsidy Scheme (DSS)", val: "dss" },
+          { zh: "國際/私立", en: "International/Private", val: "intl" },
+          { zh: "其他", en: "Other", val: "other" }
+        ]
+      }
+    ]
+  },
+  // --- SECTION 1: Part 1 – Emotional Health ---
+  {
+    id: "part1",
+    label: "第一部分 / Part 1",
+    title: "您的情緒健康及支持需求",
+    titleEn: "Your Emotional Health and Support Needs",
+    desc: "以下問題是關於您一般的情緒及支持經驗，並非任何特定應用程式。\nThe following questions are about your general experiences with emotions and support, not any specific app.",
+    questions: [
+      {
+        id: "q1_stress", type: "likert",
+        zh: "您多常經歷壓力或焦慮（例如考試、功課、同儕壓力、人際關係）？",
+        en: "How often do you experience stress or anxiety (e.g., exams, homework, peer pressure)?",
+        low: "從不 / Never", high: "非常頻繁 / Very often",
+        scoring: { 1:{sunny:2,minidust:1}, 2:{sunny:1,minidust:1}, 3:{dustykid:1,dustmay:1}, 4:{teary:1,dustykid:1}, 5:{teary:2,dustykid:1} }
+      },
+      {
+        id: "q2_depression", type: "likert",
+        zh: "您多常經歷抑鬱或低落情緒？",
+        en: "How often do you experience feelings of depression or low mood?",
+        low: "從不 / Never", high: "非常頻繁 / Very often",
+        scoring: { 1:{sunny:2,minidust:1}, 2:{sunny:1}, 3:{dustykid:1}, 4:{teary:2}, 5:{teary:3} }
+      },
+      {
+        id: "q3_talkto", type: "multi",
+        zh: "當您感到壓力或情緒化時，通常會向誰傾訴？（可選多項）",
+        en: "Who do you usually talk to when you're feeling stressed or emotional? (Select all that apply)",
+        options: [
+          { zh: "朋友", en: "Friends", val: "friends", scoring: {hearty:1, sunny:1} },
+          { zh: "家人/父母", en: "Family/Parents", val: "family", scoring: {hearty:2} },
+          { zh: "老師/學校輔導員", en: "Teachers/School counselors", val: "teachers", scoring: {dustmay:1} },
+          { zh: "社工", en: "Social Workers", val: "sw", scoring: {dustmay:1} },
+          { zh: "線上應用程式或聊天機器人", en: "Online apps or chatbots", val: "apps", scoring: {minidust:1, dustykid:1} },
+          { zh: "沒有人/我自己保留", en: "No one/I keep it to myself", val: "none", scoring: {dustykid:2, teary:1} },
+          { zh: "其他", en: "Other", val: "other", scoring: {} }
+        ]
+      },
+      {
+        id: "q4_notwilling", type: "multi",
+        zh: "您不願意向以下哪些對象分享真實情緒或傾訴？（可選多項）",
+        en: "Who are you NOT willing to talk to and share your true emotions with? (Select all that apply)",
+        options: [
+          { zh: "老師", en: "Teachers", val: "teachers", scoring: {dustykid:1} },
+          { zh: "父母", en: "Parents", val: "parents", scoring: {teary:1} },
+          { zh: "學校社工", en: "School Social Workers", val: "sw", scoring: {dustykid:1} },
+          { zh: "同學", en: "Peers", val: "peers", scoring: {teary:1} },
+          { zh: "朋友", en: "Friends", val: "friends", scoring: {dustykid:1, teary:1} },
+          { zh: "線上應用程式或聊天機器人", en: "Online apps or chatbots", val: "apps", scoring: {hearty:1} },
+          { zh: "其他", en: "Others", val: "other", scoring: {} }
+        ]
+      },
+      {
+        id: "q5_barrier", type: "radio",
+        zh: "您認為阻礙您尋求幫助的最大障礙是什麼？",
+        en: "What is the biggest barrier keeping you from seeking help?",
+        options: [
+          { zh: "不想成為負擔：擔心會令他人擔心", en: "Not wanting to be a burden", val: "burden", scoring: {hearty:2, dustmay:1} },
+          { zh: "缺乏共鳴：認為他人未必能真正理解我", en: "Lack of resonance: Others won't truly understand", val: "resonance", scoring: {teary:2, dustykid:1} },
+          { zh: "恐懼評判：害怕被貼標籤或被批評", en: "Stigma: Fear of being judged or labeled", val: "stigma", scoring: {teary:1, dustmay:2} },
+          { zh: "情緒耗竭：沒有力氣去重新解釋整件事", en: "Exhaustion: No energy to explain again", val: "exhaust", scoring: {dustykid:2, teary:1} },
+          { zh: "缺乏動機：覺得求助也沒用或浪費時間", en: "Lack of motivation: Feels useless", val: "nomotiv", scoring: {dustykid:1, minidust:1} }
+        ]
+      },
+      {
+        id: "q6a_human", type: "likert",
+        zh: "您對從人類（例如社工或朋友）尋求心理健康幫助的舒適度如何？",
+        en: "How comfortable are you seeking help for mental health issues from a human (e.g., social worker or friend)?",
+        low: "完全不舒適 / Not comfortable at all", high: "非常舒適 / Very comfortable",
+        scoring: { 1:{dustykid:2,teary:1}, 2:{dustykid:1,teary:1}, 3:{dustmay:1}, 4:{hearty:1,sunny:1}, 5:{hearty:2,sunny:1} }
+      },
+      {
+        id: "q6b_ai", type: "likert",
+        zh: "您對使用 AI 聊天機器人進行情緒支持的興趣如何？",
+        en: "How interested are you in using an AI chatbot for emotional support (e.g., sharing feelings anonymously, getting advice)?",
+        low: "完全不感興趣 / Not interested at all", high: "非常感興趣 / Very interested",
+        scoring: { 1:{hearty:1}, 2:{hearty:1}, 3:{dustmay:1}, 4:{minidust:1,dustykid:1}, 5:{minidust:2,dustykid:1} }
+      }
+    ]
+  },
+  // --- SECTION 2: Part 2 – AI for Emotional Support ---
+  {
+    id: "part2",
+    label: "第二部分 / Part 2",
+    title: "關於 AI 情緒支持",
+    titleEn: "About AI for Emotional Support",
+    desc: "",
+    questions: [
+      {
+        id: "q7_advantage", type: "radio",
+        zh: "您認為 AI 聊天機器人與真人相比，最大的優勢是什麼？",
+        en: "What do you think is the biggest advantage of an AI chatbot compared to a real person?",
+        options: [
+          { zh: "全天候隨時可用", en: "24/7 availability at any time", val: "247", scoring: {minidust:1, sunny:1} },
+          { zh: "完全匿名且無須擔心被評判", en: "Total anonymity and no fear of judgment", val: "anon", scoring: {teary:2, dustykid:1} },
+          { zh: "回覆速度快，不需等待", en: "Fast responses without waiting", val: "fast", scoring: {sunny:1, minidust:1} },
+          { zh: "可以自在地反覆修改想說的話", en: "Comfort of being able to edit what I want to say", val: "edit", scoring: {dustykid:2, dustmay:1} },
+          { zh: "沒有優勢", en: "No advantages", val: "none", scoring: {hearty:2} }
+        ]
+      },
+      {
+        id: "q8_trust", type: "rank",
+        zh: "在開始使用後，什麼最能增加您對情緒支持 AI 的信任？（請拖動排序 1-6）",
+        en: "What factors would best increase your trust in an emotional support AI? (Please drag to rank 1-6)",
+        options: [
+          { zh: "明確的隱私聲明（保證數據不向學校/家長公開）", en: "Clear privacy statement (data not shared with school/parents)", val: "privacy", scoring: {teary:1, dustmay:1} },
+          { zh: "AI 能展現出更強的同理心（像朋友般說話）", en: "AI shows stronger empathy (speaks like a friend)", val: "empathy", scoring: {hearty:2, teary:1} },
+          { zh: "AI 能展現真實反饋，不刻意迎合", en: "AI provides authentic feedback, not just pandering", val: "authentic", scoring: {dustykid:2, dustmay:1} },
+          { zh: "AI 能記住我的歷史背景及對話內容", en: "AI remembers my historical context", val: "memory", scoring: {hearty:1, dustykid:1} },
+          { zh: "內容是由專業心理學家或輔導員設計", en: "Content designed by professional psychologists", val: "prof", scoring: {dustmay:2} },
+          { zh: "與我信賴的品牌或角色合作（如 Dustykid）", en: "Collaboration with a trusted brand/character (e.g., Dustykid)", val: "brand", scoring: {minidust:1, sunny:1} }
+        ]
+      },
+      {
+        id: "q9_response", type: "radio",
+        zh: "當您感到壓力時，您更希望 AI 提供什麼樣的回應？",
+        en: "When you are stressed, which type of response do you prefer from AI? (Forced Choice)",
+        options: [
+          { zh: "認知上的理解及支持：理解、邏輯分析或實用的解決建議", en: "Cognitive: Logical analysis and practical advice", val: "cognitive", scoring: {dustykid:2, dustmay:1, minidust:1} },
+          { zh: "情感上的慰藉及安慰：傾聽、安慰、插圖或金句啟發", en: "Affective: Active listening, emotional soothing, illustrations, or quotes", val: "affective", scoring: {teary:2, hearty:2, sunny:1} }
+        ]
+      },
+      {
+        id: "q10_lonely", type: "likert",
+        zh: "您認為 AI 聊天機器人能多大程度減輕中學生的孤獨感？",
+        en: "To what extent do you think AI chatbots can reduce loneliness among secondary students?",
+        low: "完全不能 / Not at all", high: "很大程度 / To a great extent",
+        scoring: { 1:{dustykid:1}, 2:{dustykid:1}, 3:{dustmay:1}, 4:{minidust:1,sunny:1}, 5:{sunny:2,minidust:1} }
+      },
+      {
+        id: "q11_stress_ai", type: "likert",
+        zh: "您認為 AI 聊天機器人能多大程度協助中學生緩解壓力或處理情緒困擾？",
+        en: "To what extent do you think AI chatbots can reduce stress or help cope with emotional problems among secondary students?",
+        low: "完全不能 / Not at all", high: "很大程度 / To a great extent",
+        scoring: { 1:{dustykid:1}, 2:{dustykid:1}, 3:{dustmay:1}, 4:{minidust:1,hearty:1}, 5:{sunny:2,hearty:1} }
+      }
+    ]
+  },
+  // --- SECTION 3: Part 3 – Dustykid AI ---
+  {
+    id: "part3",
+    label: "第三部分 / Part 3",
+    title: "關於 Dustykid AI",
+    titleEn: "About Dustykid AI",
+    desc: "以下問題是關於 Dustykid AI，一個 24/7 情緒支持聊天機器人，配有趣味插圖，基於受歡迎的 Dustykid 角色。\nThe following questions are about Dustykid AI, a 24/7 chatbot for emotional support with fun illustrations, based on the popular Dustykid character.",
+    questions: [
+      {
+        id: "q12_heard", type: "radio",
+        zh: "您聽過 Dustykid（情緒健康 IP/角色）嗎？",
+        en: "Have you heard of Dustykid (the emotional wellness IP/character)?",
+        options: [
+          { zh: "是", en: "Yes", val: "yes" },
+          { zh: "否", en: "No", val: "no" },
+          { zh: "不確定", en: "Not sure", val: "unsure" }
+        ]
+      },
+      {
+        id: "q13_ip_impact", type: "likert",
+        zh: "Dustykid 形象如何影響您使用此 AI 的興趣？",
+        en: "How does the Dustykid character/IP affect your attitude toward using an AI chatbot like this?",
+        low: "令我興趣大減 / Much less interested", high: "令我興趣大增 / Much more interested",
+        condition: { qid: "q12_heard", vals: ["yes"] }
+      },
+      {
+        id: "q14_used", type: "radio",
+        zh: "您曾使用過 Dustykid AI 聊天機器人嗎？",
+        en: "Have you ever used the Dustykid AI chatbot?",
+        options: [
+          { zh: "是", en: "Yes", val: "yes" },
+          { zh: "否", en: "No", val: "no" }
+        ]
+      }
+    ]
+  },
+  // --- SECTION 4: Branch A – Prior Users ---
+  {
+    id: "branchA",
+    label: "分支 A：既有用戶 / Branch A: Prior Users",
+    title: "使用體驗回饋",
+    titleEn: "Retention Audit",
+    desc: "",
+    condition: { qid: "q14_used", vals: ["yes"] },
+    questions: [
+      {
+        id: "qa1_freq", type: "radio",
+        zh: "過去一個月，您使用 Dustykid AI 的頻率如何？",
+        en: "How often have you used Dustykid AI in the past month?",
+        options: [
+          { zh: "每日", en: "Daily", val: "daily" },
+          { zh: "每週幾次", en: "A few times a week", val: "weekly_few" },
+          { zh: "每週一次", en: "Once a week", val: "weekly" },
+          { zh: "少於每週一次", en: "Less than once a week", val: "less" },
+          { zh: "完全沒有（已停止使用）", en: "Not at all (stopped using)", val: "stopped" }
+        ]
+      },
+      {
+        id: "qa2_stop", type: "multi", max: 3,
+        zh: "如果您停止或減少使用，主要原因是什麼？（最多選 3 項）",
+        en: "If you stopped or reduced using Dustykid AI, what were the main reasons? (Select up to 3)",
+        options: [
+          { zh: "內容重複且像背劇本", en: "It felt repetitive or scripted", val: "repetitive" },
+          { zh: "內容太表面/只會說好話", en: "It felt like just pandering/saying nice things", val: "superficial" },
+          { zh: "對話太浪費時間", en: "Too much packaging was time-consuming", val: "slow" },
+          { zh: "隱私擔憂", en: "Privacy concerns", val: "privacy" },
+          { zh: "學校功課太忙", en: "Too busy with schoolwork", val: "busy" },
+          { zh: "更喜歡與真人交談", en: "Preferred talking to real people", val: "human" },
+          { zh: "應用程式難用或不吸引", en: "App was hard to use or not engaging", val: "ux" },
+          { zh: "沒有學校激勵", en: "No school incentives", val: "incentive" },
+          { zh: "其他原因", en: "Other reasons", val: "other" }
+        ]
+      },
+      {
+        id: "qa3_sat", type: "likert",
+        zh: "您對 Dustykid AI 功能的滿意度如何（例如插圖、情緒追蹤、建議）？",
+        en: "How satisfied were you with Dustykid AI's features (e.g., illustrations, mood tracking, advice)?",
+        low: "完全不滿意 / Not satisfied at all", high: "非常滿意 / Very satisfied"
+      },
+      {
+        id: "qa4_missing", type: "multi", max: 3,
+        zh: "Dustykid AI 缺少哪些能讓你想要重複使用的元素？（最多選 3 項）",
+        en: "What features are missing that would make you use it more? (Select up to 3)",
+        options: [
+          { zh: "更多個人化回應", en: "More personalized responses", val: "personal" },
+          { zh: "更簡化的回答", en: "More simplified response", val: "simple" },
+          { zh: "遊戲或使用獎勵", en: "Games or rewards for using it", val: "games" },
+          { zh: "更好地與學校活動整合", en: "Better integration with school activities", val: "school" },
+          { zh: "與朋友的群組聊天", en: "Group chats with friends", val: "group" },
+          { zh: "語音或影片選項", en: "Voice or video options", val: "voice" },
+          { zh: "無/現況已好", en: "None/It's fine as is", val: "none" }
+        ]
+      },
+      {
+        id: "qa5_encourage", type: "multi", max: 3,
+        zh: "什麼會鼓勵您定期使用 Dustykid AI？（最多選 3 項）",
+        en: "What would encourage you to keep using Dustykid AI regularly? (Select up to 3)",
+        options: [
+          { zh: "學校獎勵或作業", en: "School rewards or assignments", val: "reward" },
+          { zh: "每日提醒或通知", en: "Daily reminders or notifications", val: "remind" },
+          { zh: "改善回應的同理心", en: "Improved empathy in responses", val: "empathy" },
+          { zh: "有趣更新如新插圖", en: "Fun updates like new illustrations", val: "fun" },
+          { zh: "如需與輔導員分享的選項", en: "Sharing options with counselors if needed", val: "share" },
+          { zh: "無/我不會使用更多", en: "Nothing/I wouldn't use it more", val: "none" }
+        ]
+      },
+      {
+        id: "qa6_rec", type: "likert",
+        zh: "您多可能向朋友推薦 Dustykid AI？",
+        en: "How likely are you to recommend Dustykid AI to a friend?",
+        low: "完全不可能 / Not likely at all", high: "非常可能 / Very likely"
+      }
+    ]
+  },
+  // --- SECTION 5: Branch B – New Users ---
+  {
+    id: "branchB",
+    label: "分支 B：新試用戶 / Branch B: First Impression",
+    title: "首次試用體驗",
+    titleEn: "First Impression After Trial",
+    desc: "請先試用 Dustykid AI 最少 5 分鐘，然後回答以下問題。\nPlease try Dustykid AI for at least 5 minutes, then answer the following questions.",
+    condition: { qid: "q14_used", vals: ["no"] },
+    questions: [
+      {
+        id: "qb1_ease", type: "likert",
+        zh: "試用後，您覺得 Dustykid AI 的易用性如何？",
+        en: "After trying it, rate Dustykid AI's ease of use.",
+        low: "完全不易用 / Not easy at all", high: "非常易用 / Very easy"
+      },
+      {
+        id: "qb2_engaging", type: "likert",
+        zh: "試用後，您覺得回應及插圖的吸引力如何？",
+        en: "After trying it, how engaging did you find the responses and illustrations?",
+        low: "完全不吸引 / Not engaging at all", high: "非常吸引 / Very engaging"
+      },
+      {
+        id: "qb3_liked", type: "multi", max: 3,
+        zh: "試用後，您最喜歡 Dustykid AI 的什麼？（最多選 3 項）",
+        en: "After trying it, what did you like most about Dustykid AI? (Select up to 3)",
+        options: [
+          { zh: "可愛角色及視覺", en: "The cute character and visuals", val: "cute" },
+          { zh: "匿名及隱私", en: "Anonymity and privacy", val: "anon" },
+          { zh: "快速回應", en: "Quick responses", val: "fast" },
+          { zh: "有幫助的建議或反思", en: "Helpful advice or reflections", val: "advice" },
+          { zh: "情緒追蹤/日記功能", en: "Mood tracking/journal features", val: "mood" },
+          { zh: "沒有特別", en: "Nothing in particular", val: "none" }
+        ]
+      },
+      {
+        id: "qb4_improve", type: "multi", max: 3,
+        zh: "試用後，什麼可以改善？（最多選 3 項）",
+        en: "After trying it, what could be improved based on your first use? (Select up to 3)",
+        options: [
+          { zh: "更好地理解我的情緒", en: "Better understanding of my emotions", val: "emotion" },
+          { zh: "減少明顯的模板，提升對話真實感", en: "De-templating and less scripted feeling", val: "detemplate" },
+          { zh: "更多主題選項", en: "More options for topics", val: "topics" },
+          { zh: "語言同步一致性", en: "Fix language sync (English UI = English AI)", val: "lang" },
+          { zh: "優化資訊架構清晰度", en: "Clearer information architecture", val: "ia" },
+          { zh: "減少對話前的步驟及選擇", en: "Reduce steps before starting conversation", val: "steps" },
+          { zh: "界面設計優化", en: "Align with interface conventions", val: "ui" },
+          { zh: "更多功能（如溫習指導與學習工具）", en: "More practical features (e.g., study guide)", val: "features" },
+          { zh: "更多有趣元素（例如遊戲）", en: "More fun elements (e.g., games)", val: "fun" },
+          { zh: "與學校工具整合", en: "Integration with school tools", val: "school" },
+          { zh: "其他", en: "Others", val: "other" },
+          { zh: "無/已經很好", en: "Nothing/It's good", val: "none" }
+        ]
+      },
+      {
+        id: "qb5_interest", type: "likert",
+        zh: "試用後，您對定期使用類似 Dustykid AI 的興趣如何？",
+        en: "After trying it, how interested are you in using something like Dustykid AI regularly?",
+        low: "完全不感興趣 / Not interested at all", high: "非常感興趣 / Very interested"
+      },
+      {
+        id: "qb6_rec", type: "likert",
+        zh: "試用後，您多可能向朋友推薦 Dustykid AI？",
+        en: "After trying it, how likely are you to recommend Dustykid AI to a friend?",
+        low: "完全不可能 / Not likely at all", high: "非常可能 / Very likely"
+      }
+    ]
+  }
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let answers = {};
+let currentSection = 0;
+let visibleSections = [];
+let scores = { dustykid:0, teary:0, hearty:0, minidust:0, dustmay:0, sunny:0 };
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  createParticles();
+  buildVisibleSections();
+  renderCurrentSection();
+  updateProgress();
+}
+
+function createParticles() {
+  const c = document.getElementById('particles');
+  for (let i=0; i<25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDuration = (10+Math.random()*15)+'s';
+    p.style.animationDelay = Math.random()*8+'s';
+    p.style.width = p.style.height = (3+Math.random()*5)+'px';
+    c.appendChild(p);
+  }
+}
+
+function buildVisibleSections() {
+  visibleSections = [];
+  for (let i=0; i<sections.length; i++) {
+    const sec = sections[i];
+    if (sec.condition) {
+      const depVal = answers[sec.condition.qid];
+      if (!depVal || !sec.condition.vals.includes(depVal)) continue;
+    }
+    visibleSections.push(i);
+  }
+}
+
+function renderCurrentSection() {
+  const body = document.getElementById('surveyBody');
+  body.innerHTML = '';
+
+  if (currentSection >= visibleSections.length) {
+    calculateResult();
+    return;
+  }
+
+  const secIdx = visibleSections[currentSection];
+  const sec = sections[secIdx];
+
+  const div = document.createElement('div');
+  div.className = 'section active';
+  div.id = 'sec_' + sec.id;
+
+  let html = '';
+  if (sec.label) html += `<span class="section-label">${sec.label}</span>`;
+  if (sec.title) html += `<h2 class="section-title">${sec.title}</h2>`;
+  if (sec.titleEn) html += `<p style="font-size:0.95rem;color:var(--text2);margin-bottom:4px;">${sec.titleEn}</p>`;
+  if (sec.desc) html += `<p class="section-desc">${sec.desc.replace(/\n/g,'<br>')}</p>`;
+
+  // Filter visible questions (conditional)
+  const visQs = sec.questions.filter(q => {
+    if (!q.condition) return true;
+    const depVal = answers[q.condition.qid];
+    return depVal && q.condition.vals.includes(depVal);
+  });
+
+  visQs.forEach((q, qi) => {
+    html += renderQuestion(q, qi+1);
+  });
+
+  // Nav buttons
+  html += `<div class="nav-row">`;
+  if (currentSection > 0) html += `<button class="btn btn-back" onclick="goBack()">← 上一頁 / Back</button>`;
+  else html += `<div></div>`;
+  html += `<button class="btn btn-next" id="btnNext" onclick="goNext()">下一頁 / Next →</button>`;
+  html += `</div>`;
+  html += `<div class="validation-msg" id="valMsg">請回答所有必填問題 / Please answer all required questions</div>`;
+
+  div.innerHTML = html;
+  body.appendChild(div);
+
+  // Init ranking drag
+  initRankDrag();
+
+  // Restore saved answers
+  restoreAnswers(sec);
+}
+
+function renderQuestion(q, num) {
+  let h = `<div class="q-card" data-qid="${q.id}">`;
+  h += `<div class="q-num">Q${num}</div>`;
+  h += `<div class="q-text">${q.zh}</div>`;
+  h += `<div class="q-text-en">${q.en}</div>`;
+
+  if (q.type === 'radio') {
+    h += `<div class="opt-list">`;
+    q.options.forEach(o => {
+      h += `<label class="opt-item" data-val="${o.val}">
+        <input type="radio" name="${q.id}" value="${o.val}" onchange="onRadio('${q.id}','${o.val}',this)">
+        <div class="opt-label"><span class="zh">${o.zh}</span><span class="en">${o.en}</span></div>
+      </label>`;
+    });
+    h += `</div>`;
+  }
+  else if (q.type === 'multi') {
+    if (q.max) h += `<div class="multi-hint">最多選 ${q.max} 項 / Select up to ${q.max}</div>`;
+    h += `<div class="opt-list">`;
+    q.options.forEach(o => {
+      h += `<label class="opt-item" data-val="${o.val}">
+        <input type="checkbox" name="${q.id}" value="${o.val}" onchange="onMulti('${q.id}',${q.max||99},this)">
+        <div class="opt-label"><span class="zh">${o.zh}</span><span class="en">${o.en}</span></div>
+      </label>`;
+    });
+    h += `</div>`;
+  }
+  else if (q.type === 'likert') {
+    h += `<div class="likert-wrap">`;
+    h += `<div class="likert-labels"><span>${q.low}</span><span>${q.high}</span></div>`;
+    h += `<div class="likert-row">`;
+    for (let i=1; i<=5; i++) {
+      h += `<button class="likert-btn" data-q="${q.id}" data-val="${i}" onclick="onLikert('${q.id}',${i},this)">${i}</button>`;
+    }
+    h += `</div></div>`;
+  }
+  else if (q.type === 'rank') {
+    h += `<div class="rank-list" id="rank_${q.id}">`;
+    q.options.forEach((o, i) => {
+      h += `<div class="rank-item" data-val="${o.val}" data-idx="${i}">
+        <span class="rank-num">${i+1}</span>
+        <div class="rank-text opt-label"><span class="zh">${o.zh}</span><span class="en">${o.en}</span></div>
+        <div class="rank-arrows">
+          <button type="button" onclick="moveRankItem('rank_${q.id}',this,&#39;up&#39;)" title="Move up">▲</button>
+          <button type="button" onclick="moveRankItem('rank_${q.id}',this,&#39;down&#39;)" title="Move down">▼</button>
+        </div>
+      </div>`;
+    });
+    h += `</div>`;
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+// ============================================================
+// INPUT HANDLERS
+// ============================================================
+function onRadio(qid, val, el) {
+  answers[qid] = val;
+  // visual
+  el.closest('.opt-list').querySelectorAll('.opt-item').forEach(i => i.classList.remove('selected'));
+  el.closest('.opt-item').classList.add('selected');
+}
+
+function onMulti(qid, max, el) {
+  const checked = document.querySelectorAll(`input[name="${qid}"]:checked`);
+  if (checked.length > max) { el.checked = false; return; }
+  answers[qid] = Array.from(checked).map(c => c.value);
+  // visual
+  el.closest('.opt-list').querySelectorAll('.opt-item').forEach(i => {
+    i.classList.toggle('selected', i.querySelector('input').checked);
+  });
+}
+
+function onLikert(qid, val, el) {
+  answers[qid] = val;
+  el.parentElement.querySelectorAll('.likert-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ============================================================
+// RANKING UP/DOWN BUTTONS
+// ============================================================
+function moveRankItem(listId, btn, direction) {
+  const list = document.getElementById(listId);
+  const item = btn.closest('.rank-item');
+  const items = [...list.children];
+  const idx = items.indexOf(item);
+
+  if (direction === 'up' && idx > 0) {
+    list.insertBefore(item, items[idx - 1]);
+    item.classList.add('moving-up');
+    setTimeout(() => item.classList.remove('moving-up'), 250);
+  } else if (direction === 'down' && idx < items.length - 1) {
+    list.insertBefore(items[idx + 1], item);
+    item.classList.add('moving-down');
+    setTimeout(() => item.classList.remove('moving-down'), 250);
+  }
+
+  updateRankNums(list);
+  updateRankButtons(list);
+}
+
+function updateRankButtons(list) {
+  const items = [...list.querySelectorAll('.rank-item')];
+  items.forEach((item, i) => {
+    const btns = item.querySelectorAll('.rank-arrows button');
+    btns[0].disabled = (i === 0);
+    btns[1].disabled = (i === items.length - 1);
+  });
+}
+
+function initRankDrag() {
+  document.querySelectorAll('.rank-list').forEach(list => {
+    updateRankNums(list);
+    updateRankButtons(list);
+  });
+}
+
+function updateRankNums(list) {
+  const items = list.querySelectorAll('.rank-item');
+  const qid = list.id.replace('rank_','');
+  const order = [];
+  items.forEach((item, i) => {
+    item.querySelector('.rank-num').textContent = i+1;
+    order.push(item.dataset.val);
+  });
+  answers[qid] = order;
+}
+
+// ============================================================
+// RESTORE ANSWERS (for back navigation)
+// ============================================================
+function restoreAnswers(sec) {
+  sec.questions.forEach(q => {
+    if (!answers[q.id]) return;
+    if (q.type === 'radio') {
+      const radio = document.querySelector(`input[name="${q.id}"][value="${answers[q.id]}"]`);
+      if (radio) { radio.checked = true; radio.closest('.opt-item').classList.add('selected'); }
+    }
+    else if (q.type === 'multi') {
+      (answers[q.id] || []).forEach(v => {
+        const cb = document.querySelector(`input[name="${q.id}"][value="${v}"]`);
+        if (cb) { cb.checked = true; cb.closest('.opt-item').classList.add('selected'); }
+      });
+    }
+    else if (q.type === 'likert') {
+      const btn = document.querySelector(`.likert-btn[data-q="${q.id}"][data-val="${answers[q.id]}"]`);
+      if (btn) btn.classList.add('selected');
+    }
+  });
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goNext() {
+  // Validate
+  const secIdx = visibleSections[currentSection];
+  const sec = sections[secIdx];
+  const visQs = sec.questions.filter(q => {
+    if (!q.condition) return true;
+    const depVal = answers[q.condition.qid];
+    return depVal && q.condition.vals.includes(depVal);
+  });
+
+  let allAnswered = true;
+  for (const q of visQs) {
+    if (q.type === 'rank') continue; // always has a default order
+    if (!answers[q.id] || (Array.isArray(answers[q.id]) && answers[q.id].length === 0)) {
+      allAnswered = false; break;
+    }
+  }
+
+  if (!allAnswered) {
+    document.getElementById('valMsg').classList.add('show');
+    return;
+  }
+  document.getElementById('valMsg').classList.remove('show');
+
+  currentSection++;
+  buildVisibleSections(); // re-evaluate conditions
+  // Ensure currentSection is still valid index
+  if (currentSection >= visibleSections.length) {
+    calculateResult();
+    return;
+  }
+  renderCurrentSection();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  if (currentSection > 0) {
+    currentSection--;
+    buildVisibleSections();
+    renderCurrentSection();
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function updateProgress() {
+  const total = visibleSections.length;
+  const pct = total > 0 ? Math.round((currentSection / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  const labels = ["開始 / Start", "基本資料 / Demographics", "第一部分 / Part 1", "第二部分 / Part 2", "第三部分 / Part 3", "用戶回饋 / Feedback"];
+  document.getElementById('progressLabel').textContent = labels[Math.min(currentSection, labels.length-1)];
+}
+
+// ============================================================
+// SCORING & RESULT
+// ============================================================
+function calculateResult() {
+  scores = { dustykid:0, teary:0, hearty:0, minidust:0, dustmay:0, sunny:0 };
+
+  // Process Part 1 and Part 2 questions only
+  const scoringSections = sections.filter(s => s.id === 'part1' || s.id === 'part2');
+  scoringSections.forEach(sec => {
+    sec.questions.forEach(q => {
+      if (!answers[q.id]) return;
+
+      if (q.type === 'likert' && q.scoring) {
+        const val = answers[q.id];
+        const s = q.scoring[val];
+        if (s) { for (const k in s) scores[k] += s[k]; }
+      }
+      else if (q.type === 'radio' && q.options) {
+        const opt = q.options.find(o => o.val === answers[q.id]);
+        if (opt && opt.scoring) { for (const k in opt.scoring) scores[k] += opt.scoring[k]; }
+      }
+      else if (q.type === 'multi' && q.options) {
+        (answers[q.id] || []).forEach(v => {
+          const opt = q.options.find(o => o.val === v);
+          if (opt && opt.scoring) { for (const k in opt.scoring) scores[k] += opt.scoring[k]; }
+        });
+      }
+      else if (q.type === 'rank' && q.options) {
+        // Top ranked items get more points
+        const order = answers[q.id] || [];
+        order.forEach((val, idx) => {
+          const opt = q.options.find(o => o.val === val);
+          if (opt && opt.scoring) {
+            const weight = Math.max(1, 6 - idx); // 1st=6pts, 2nd=5pts, etc.
+            for (const k in opt.scoring) scores[k] += opt.scoring[k] * weight;
+          }
+        });
+      }
+    });
+  });
+
+  showResult();
+}
+
+function showResult() {
+  document.getElementById('surveyBody').innerHTML = '';
+  document.getElementById('progressWrap').style.display = 'none';
+
+  // Find winner
+  let maxKey = 'dustykid', maxVal = 0;
+  for (const k in scores) {
+    if (scores[k] > maxVal) { maxVal = scores[k]; maxKey = k; }
+  }
+
+  const c = characters[maxKey];
+  document.getElementById('rBody').style.background = c.color;
+  document.getElementById('rName').textContent = c.name;
+  document.getElementById('rName').style.color = c.color;
+  document.getElementById('rCnName').textContent = c.cn;
+  document.getElementById('rDesc').textContent = c.desc;
+  document.getElementById('rQuote').textContent = c.quote;
+  document.getElementById('rQuote').style.color = c.color;
+
+  // Trait pills
+  const pills = document.getElementById('rPills');
+  pills.innerHTML = '';
+  c.traits.forEach(t => {
+    const pill = document.createElement('span');
+    pill.className = 'trait-pill';
+    pill.textContent = t;
+    pill.style.borderColor = c.color;
+    pill.style.color = c.color;
+    pill.style.background = c.color + '18';
+    pills.appendChild(pill);
+  });
+
+  // Score bars
+  const total = Object.values(scores).reduce((a,b)=>a+b,0) || 1;
+  const bars = document.getElementById('rBars');
+  bars.innerHTML = '';
+  const sorted = Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
+  sorted.forEach(k => {
+    const pct = Math.round((scores[k]/total)*100);
+    const row = document.createElement('div');
+    row.className = 'sb-row';
+    row.innerHTML = `
+      <div class="sb-label">${characters[k].name}</div>
+      <div class="sb-track"><div class="sb-fill" style="background:${characters[k].color}" data-w="${pct}"></div></div>
+      <div class="sb-pct">${pct}%</div>`;
+    bars.appendChild(row);
+  });
+
+  document.getElementById('resultScreen').classList.add('active');
+
+  setTimeout(() => {
+    document.querySelectorAll('.sb-fill').forEach(f => f.style.width = f.dataset.w+'%');
+  }, 300);
+}
+
+// ============================================================
+// LAUNCH
+// ============================================================
+init();
+</script>
+</body>
+</html>
